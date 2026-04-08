@@ -1,5 +1,5 @@
 ---
-name: testing
+name: dart-flutter-testing
 description: When writing unit/widget tests for repositories, DTO parsing, and BLoCs using Given/When/Then and mocked I/O.
 ---
 

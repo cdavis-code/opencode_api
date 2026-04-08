@@ -1,5 +1,5 @@
 ---
-name: publish-tools-flutter-dart-code-review
+name: dart-flutter-code-review
 description: Library-agnostic Flutter/Dart code review checklist covering Widget best practices, state management patterns (BLoC, Riverpod, Provider, GetX, MobX, Signals), Dart idioms, performance, accessibility, security, and clean architecture.
 ---
 

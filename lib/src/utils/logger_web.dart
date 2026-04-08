@@ -1,38 +1,23 @@
-/// No-op logger stub for web platforms
-/// This file is used when dart:io is not available (web/WASM)
+/// Web-compatible logger stub
+/// This version is used on web platforms to ensure compatibility
 class Logger {
-  Logger({Printer? printer});
+  static final Logger _instance = Logger._internal();
+  factory Logger() => _instance;
+  Logger._internal();
 
-  void log(
-    Level level,
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-  }) {}
-  void v(String message, {Object? error, StackTrace? stackTrace}) {}
-  void d(String message, {Object? error, StackTrace? stackTrace}) {}
-  void i(String message, {Object? error, StackTrace? stackTrace}) {}
-  void w(String message, {Object? error, StackTrace? stackTrace}) {}
-  void e(String message, {Object? error, StackTrace? stackTrace}) {}
-  void wtf(String message, {Object? error, StackTrace? stackTrace}) {}
+  void d(String message, {Object? error, StackTrace? stackTrace}) {
+    // Intentionally empty for web compatibility
+  }
+  void i(String message, {Object? error, StackTrace? stackTrace}) {
+    // Intentionally empty for web compatibility
+  }
+  void w(String message, {Object? error, StackTrace? stackTrace}) {
+    // Intentionally empty for web compatibility
+  }
+  void e(String message, {Object? error, StackTrace? stackTrace}) {
+    // Intentionally empty for web compatibility
+  }
 }
 
-enum Level { verbose, debug, info, warning, error, fatal }
-
-abstract class Printer {
-  void log(
-    Level level,
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-  });
-}
-
-class LogEvent {
-  final Level level;
-  final String message;
-  final Object? error;
-  final StackTrace? stackTrace;
-
-  LogEvent(this.level, this.message, {this.error, this.stackTrace});
-}
+// Global instance
+final logger = Logger();

@@ -1,17 +1,10 @@
-<div align="center">
-
 # opencode_api
 
-<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-  <rect width="120" height="40" fill="#4285F4"/>
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="16px">
-    opencode_api
-  </text>
-</svg>
+<div style="text-align: center;">
+  <img src="opencode_api_logo.png" style="width: 300px;">
+</div>
 
 A Dart package that wraps the opencode.ai API using retrofit for type-safe HTTP requests.
-
-</div>
 
 ## Quick Start
 
