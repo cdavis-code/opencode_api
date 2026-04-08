@@ -7,15 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-04-08
+
 ### Added
-- Platform-aware conditional logger imports for web compatibility
-- Improved README with Quick Start, Features table, and Configuration table
-- API Reference documentation in `docs/api.md`
-- Architecture documentation in `docs/architecture.md`
+- Added `text` field to `MessagePart` model for API compatibility
+
+### Changed
+- Simplified example/example.dart for quick start
 
 ### Fixed
-- Updated pubspec.yaml repository URLs to point to correct GitHub repo (cdavis-code)
-- Changed license from BSD-3-Clause to MIT
+- Moved documentation from `docs/` to `doc/` to avoid gitignore issues
+- Added `.pubignore` to properly exclude doc/ from published package
 
 ---
 
