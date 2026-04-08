@@ -56,7 +56,8 @@ Package Publication Readiness:
 - [ ] Step 5: Check package size
 - [ ] Step 6: Run static analysis
 - [ ] Step 7: Test publish (dry run)
-- [ ] Step 8: Publish to pub.dev
+- [ ] Step 8: Review dry run results and fix issues
+- [ ] Step 9: Publish to pub.dev
 ```
 
 **Step 1: Verify required files exist**
@@ -66,6 +67,20 @@ Check for these required files:
 - `README.md` - Required for package page
 - `CHANGELOG.md` - Strongly recommended
 - `pubspec.yaml` - Required, must be valid YAML
+
+**Optional: Agent Skills directory**
+
+If your package includes [Agent Skills](https://pub.dev/packages/skills) for AI assistants, include a `skills/` directory at the package root:
+
+```
+my_package/
+  lib/
+  skills/           # Optional: for AI assistant skills (pub.dev/packages/skills)
+    my_skill/
+      SKILL.md
+```
+
+The `skills/` directory is published with your package so users can run `skills get` to install them. Do not confuse with `.opencode/skills/` which is for opencode tool's internal use.
 
 **Step 2: Complete pubspec.yaml metadata**
 
@@ -150,6 +165,7 @@ Large files to check:
 - `example/` directories with assets
 - Generated files
 - Test fixtures
+- `skills/` directory (if included for pub.dev/packages/skills)
 
 Use `.pubignore` to exclude unnecessary files:
 
@@ -176,7 +192,44 @@ dart pub publish --dry-run
 
 This shows exactly what files will be published. Review the list carefully.
 
-**Step 8: Publish to pub.dev**
+**Step 8: Review dry run results and fix issues**
+
+After running `dart pub publish --dry-run`, carefully review any warnings or errors in the output and take action:
+
+### Common dry run warnings and fixes
+
+| Warning | Cause | Fix |
+|---------|-------|-----|
+| "checked-in files are modified in git" | Uncommitted changes | Commit changes: `git add . && git commit -m "Prepare for publishing"` |
+| "checked-in files are ignored by .gitignore" | Files tracked by git but also ignored | Use `.pubignore` to exclude, or remove from git: `git rm --cached path/to/file` |
+| "Rename the top-level 'docs' directory to 'doc'" | Wrong directory naming | Rename: `mv docs doc` |
+| "Rename the top-level 'example' directory to 'example'" | Expected singular | Rename directory to `example/` (singular) |
+| "Package has X warnings" | Validation issues | Review each warning and fix accordingly |
+| "Version X.Y.Z already exists" | Version already published | Increment version in pubspec.yaml |
+| "Package validation found the following issues" | Various | Address each issue listed |
+
+### Workflow for reviewing dry run results:
+
+1. **Run the dry run**: `dart pub publish --dry-run`
+2. **Read the output**: Look for "Package validation found" section
+3. **Identify issues**: Note each warning/error message
+4. **Apply fixes**: Use the table above to resolve each issue
+5. **Re-run dry run**: Confirm all issues are resolved
+6. **Ask to publish**: Once all errors cleared, ask user if they want to publish:
+
+```
+✅ All dry run issues resolved! The package is ready for publishing.
+
+Would you like me to publish now? (Run `dart pub publish`)
+```
+
+### If errors remain
+
+If the dry run shows errors (not just warnings), do not proceed to publishing. Fix each error and re-run until dry run passes with no errors.
+
+Only move to Step 9 when dry run shows no errors.
+
+**Step 9: Publish to pub.dev**
 
 When ready:
 
