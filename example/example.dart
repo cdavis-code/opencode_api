@@ -50,6 +50,36 @@ void main() async {
     } catch (e) {
       print('Could not get current project: $e');
     }
+
+    // Example of using TUI endpoints to send a prompt
+    print('\n--- TUI Prompt Example ---');
+    try {
+      // Append text to the TUI prompt
+      final appendSuccess = await client.tuiAppendPrompt({
+        'text': 'Hello, world!',
+      });
+      print('Prompt appended: $appendSuccess');
+
+      if (appendSuccess) {
+        // Submit the prompt
+        final submitSuccess = await client.tuiSubmitPrompt();
+        print('Prompt submitted: $submitSuccess');
+
+        if (submitSuccess) {
+          // Wait for the next control request (response)
+          // Note: This will block until a control request is available
+          print('Waiting for response...');
+          final controlRequest = await client.tuiControlNext();
+          print('Control request received:');
+          print('  ID: ${controlRequest.id}');
+          print('  Type: ${controlRequest.type}');
+          print('  Body: ${controlRequest.body}');
+        }
+      }
+    } catch (e) {
+      print('TUI example failed: $e');
+      print('Note: TUI endpoints require an active TUI session');
+    }
   } catch (e) {
     print('Error: $e');
   }
