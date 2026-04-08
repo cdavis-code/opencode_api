@@ -128,7 +128,9 @@ Re-run `pana .` and compare scores. Iterate if issues remain.
 
 ### Platform compatibility
 
-See [platform-compatibility.md](platform-compatibility.md) for WASM/Web issues.
+Common issues:
+- **WASM incompatibility**: Usually caused by `dart:io` imports. Use conditional exports to provide platform-specific implementations.
+- **Platform-specific APIs**: Abstract platform-specific code behind interfaces with conditional imports.
 
 ### Static analysis failures
 
@@ -160,7 +162,12 @@ Because:
 ```
 
 **Fix:**
-Replace the problematic package with conditional imports. See [platform-compatibility.md](platform-compatibility.md) for detailed guidance.
+Replace the problematic package with conditional exports:
+```dart
+// Create platform-specific implementations and export conditionally
+export 'my_class_native.dart' 
+    if (dart.library.js) 'my_class_web.dart';
+```
 
 ### Example 2: Missing documentation
 
@@ -206,4 +213,3 @@ dart format .
 
 - [Pana documentation](https://pub.dev/packages/pana)
 - [Pub package requirements](https://pub.dev/help)
-- [Platform compatibility guide](platform-compatibility.md)
