@@ -1,0 +1,48 @@
+# opencode_api
+
+> Dart package for interacting with opencode.ai API using type-safe HTTP requests.
+
+## Core Files
+
+- [lib/opencode_api.dart](lib/opencode_api.dart) - Main library exports
+- [lib/src/api/opencode_client.dart](lib/src/api/opencode_client.dart) - Retrofit API definitions
+- [lib/src/api/opencode_client_extension.dart](lib/src/api/opencode_client_extension.dart) - Convenience methods
+- [lib/src/models/](lib/src/models/) - Data models (Project, Session, Message, FileNode, Response)
+- [lib/src/exceptions/opencode_exception.dart](lib/src/exceptions/opencode_exception.dart) - Custom exception
+- [docs/api.md](docs/api.md) - Detailed API reference
+- [docs/architecture.md](docs/architecture.md) - Architecture documentation
+
+## Key Concepts
+
+- **Retrofit** - Code generation for type-safe HTTP clients
+- **Dio** - HTTP client used under the hood
+- **Conditional Exports** - Platform-aware logger for web/native compatibility
+- **HttpResponse Wrapper** - All endpoints return HttpResponse<T>
+
+## Quick Start
+
+```dart
+final dio = OpencodeClient.createDio(
+  username: 'opencode',
+  password: 'password',
+  baseUrl: 'http://localhost:4096'
+);
+
+final client = OpencodeClient(dio);
+final health = await client.getHealth();
+```
+
+## Supported Endpoints
+
+- Global: health, events
+- Project: list, current
+- Session: CRUD, init, fork, abort, share, diff, summarize, revert
+- Messages: send, list, async, command, shell
+- Files: find, find/file, find/symbol, file, file/content, file/status
+- Tools, LSP, Formatter, MCP
+- TUI (12 endpoints)
+- Auth, Events (SSE)
+
+## Error Handling
+
+Use `OpencodeException.userMessage` for safe user-facing error messages that don't leak implementation details.
