@@ -91,6 +91,12 @@ After changes to API definitions:
 dart run build_runner build --delete-conflicting-outputs
 ```
 
+## Support
+
+If you find this package helpful, consider supporting its development:
+
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/cdavis)
+
 ## License
 
 MIT - See [LICENSE](./LICENSE)
