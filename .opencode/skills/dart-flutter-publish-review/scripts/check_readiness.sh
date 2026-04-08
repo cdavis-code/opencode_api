@@ -83,6 +83,60 @@ else
     WARNINGS=$((WARNINGS + 1))
 fi
 
+# Check version against pub.dev for existing packages
+if [ -n "$NAME" ] && [ -n "$VERSION" ]; then
+    echo ""
+    echo "🌐 Checking version against pub.dev..."
+    
+    # Query pub.dev API with HTTP status code
+    PUBDEV_RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" --max-time 5 "https://pub.dev/api/packages/$NAME" 2>/dev/null)
+    
+    # Extract HTTP status code
+    HTTP_CODE=$(echo "$PUBDEV_RESPONSE" | grep "HTTP_CODE:" | cut -d':' -f2)
+    # Remove HTTP code from response for parsing
+    PUBDEV_RESPONSE=$(echo "$PUBDEV_RESPONSE" | sed '/HTTP_CODE:/d')
+    
+    if [ "$HTTP_CODE" = "200" ]; then
+        # Extract latest published version from API response
+        PUBLISHED_VERSION=$(echo "$PUBDEV_RESPONSE" | grep -o '"latest":{[^}]*}' | grep -o '"version":"[^"]*"' | head -1 | cut -d'"' -f4)
+        
+        if [ -n "$PUBLISHED_VERSION" ]; then
+            if [ "$VERSION" = "$PUBLISHED_VERSION" ]; then
+                echo "  ✗ Version $VERSION already published on pub.dev"
+                echo "    Published version: $PUBLISHED_VERSION"
+                echo "    Increment version in pubspec.yaml before publishing"
+                ERRORS=$((ERRORS + 1))
+            else
+                echo "  ✓ Version $VERSION differs from published ($PUBLISHED_VERSION)"
+            fi
+        else
+            echo "  ⚠ Could not parse published version (unexpected API response)"
+            WARNINGS=$((WARNINGS + 1))
+        fi
+    elif [ "$HTTP_CODE" = "404" ]; then
+        echo "  ℹ Package not found on pub.dev (new package)"
+        echo "    Version check skipped for new packages"
+    else
+        echo "  ⚠ Could not reach pub.dev API (HTTP $HTTP_CODE)"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+fi
+
+# Check CHANGELOG.md for version entry
+if [ -f "CHANGELOG.md" ] && [ -n "$VERSION" ]; then
+    echo ""
+    echo "📋 Checking CHANGELOG.md for version entry..."
+    
+    # Check if version appears in CHANGELOG (with or without brackets)
+    if grep -q "$VERSION" CHANGELOG.md; then
+        echo "  ✓ Version $VERSION found in CHANGELOG.md"
+    else
+        echo "  ⚠ Version $VERSION not found in CHANGELOG.md"
+        echo "    Add entry like: ## [$VERSION] - YYYY-MM-DD"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+fi
+
 if grep -q "^homepage:" pubspec.yaml || grep -q "^repository:" pubspec.yaml; then
     echo "  ✓ homepage or repository present"
 else

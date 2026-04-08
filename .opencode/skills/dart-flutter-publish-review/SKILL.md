@@ -1,5 +1,5 @@
 ---
-name: publishing-dart-packages
+name: dart-flutter-publish-review
 description: Prepares Dart and Flutter packages for publication to pub.dev, ensuring all metadata, documentation, and requirements are met. Use when preparing to publish a package, updating package metadata, or reviewing package publication readiness.
 ---
 
@@ -278,6 +278,55 @@ test/fixtures/large_files/
 *.jpg
 ```
 
+### Version already published
+
+**Issue:** "Version X.Y.Z of package_name already exists" error when publishing
+
+**Fix:** Increment the version in pubspec.yaml:
+
+```yaml
+# Before
+version: 1.0.0
+
+# After (patch update - bug fixes)
+version: 1.0.1
+
+# After (minor update - new features, backward compatible)
+version: 1.1.0
+
+# After (major update - breaking changes)
+version: 2.0.0
+```
+
+**Version increment guidelines:**
+- **Patch** (1.0.0 → 1.0.1): Bug fixes, minor improvements
+- **Minor** (1.0.0 → 1.1.0): New features, backward compatible
+- **Major** (1.0.0 → 2.0.0): Breaking changes
+
+**Check current published version:**
+```bash
+# View on pub.dev
+open https://pub.dev/packages/YOUR_PACKAGE_NAME
+```
+
+### CHANGELOG not updated
+
+**Issue:** Version in pubspec.yaml doesn't match CHANGELOG.md
+
+**Fix:** Add version entry to CHANGELOG.md:
+
+```markdown
+## [1.0.1] - 2025-01-08
+### Fixed
+- Bug in feature X
+
+## [1.0.0] - 2025-01-01
+### Added
+- Initial release
+```
+
+Ensure the version number in CHANGELOG matches pubspec.yaml exactly.
+
 ## Examples
 
 ### Example 1: Complete pubspec.yaml
@@ -377,6 +426,8 @@ bash scripts/check_readiness.sh
 This verifies:
 - Required files exist
 - Pubspec has required fields
+- Version differs from published version on pub.dev
+- CHANGELOG.md contains current version
 - Package size is acceptable
 - Static analysis passes
 
