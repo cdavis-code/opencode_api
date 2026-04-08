@@ -1,93 +1,199 @@
-# Dart Pana Review Skill
+---
+name: reviewing-dart-packages
+description: Runs pana analysis on Dart packages, identifies scoring issues, and suggests fixes to achieve higher pub scores. Use when improving package quality, preparing for pub.dev publication, or when pana score issues are mentioned.
+---
 
-## Overview
+# Dart Package Review with Pana
 
-This skill runs pana analysis on a Dart package, reviews the results, identifies issues, and provides suggested resolutions. The skill then asks the user whether to automatically apply the suggested fixes.
+## Quick start
+
+Run pana on the current package:
+
+```bash
+pana .
+```
 
 ## Workflow
 
-1. Run `pana .` on the current package
-2. Parse the results to identify issues
-3. Categorize issues by severity (critical, warning, suggestion)
-4. Generate resolution suggestions for each issue
-5. Present findings to user and ask if they want to apply fixes
-6. If confirmed, apply suggested resolutions
-7. Verify fixes by running analysis again
+Copy this checklist and track your progress:
 
-## Issue Categories
+```
+Package Review Progress:
+- [ ] Step 1: Run pana analysis
+- [ ] Step 2: Identify scoring issues
+- [ ] Step 3: Categorize by severity
+- [ ] Step 4: Suggest resolutions
+- [ ] Step 5: Apply fixes (with user confirmation)
+- [ ] Step 6: Verify improvements
+```
 
-### Critical Issues
-- Package doesn't meet minimum pub score requirements
-- Missing essential files (README, CHANGELOG, LICENSE)
+**Step 1: Run pana analysis**
+
+Execute `pana .` and review the output. The tool scores packages on:
+- Dart file conventions (30 points)
+- Documentation (20 points)
+- Platform support (20 points)
+- Static analysis (50 points)
+- Dependencies (40 points)
+
+**Step 2: Identify scoring issues**
+
+Look for sections marked with ✗ or [~] (partial credit). Parse the output for:
+- Critical: Missing files, invalid pubspec, analysis failures
+- Warnings: Platform compatibility, documentation gaps
+- Suggestions: Topics, examples, description improvements
+
+**Step 3: Categorize by severity**
+
+**Critical Issues** (must fix):
+- Package score below 100
+- Missing README, CHANGELOG, or LICENSE
 - Invalid pubspec.yaml
 - Failing static analysis
 
-### Warnings
-- Missing documentation comments
-- Low test coverage
-- Platform compatibility issues
+**Warnings** (should fix):
+- Platform compatibility issues (especially WASM)
+- Documentation coverage below 20%
 - Outdated dependencies
 
-### Suggestions
+**Suggestions** (nice to have):
+- Add topics to pubspec
 - Improve package description
 - Add more examples
-- Enhance documentation
-- Add topics to pubspec
 
-## Resolution Strategies
+**Step 4: Suggest resolutions**
 
-### For Missing Files
-- Create standard files with appropriate content
-- README.md with proper structure
-- CHANGELOG.md following Keep a Changelog format
-- LICENSE with appropriate license text
+For each issue, provide:
+1. Clear explanation of the problem
+2. Specific fix recommendation
+3. Example code or command if applicable
 
-### For Documentation Issues
-- Add missing dartdoc comments
-- Improve existing documentation
-- Add more examples
+**Step 5: Apply fixes**
 
-### For Pubspec Issues
-- Update description to be more informative
-- Add proper homepage/repository/issue_tracker URLs
-- Add topics for discoverability
-- Fix any validation errors
+Ask user for confirmation before making changes. Present as:
+```
+Issue: [description]
+Fix: [specific action]
+Apply? (yes/no)
+```
 
-### For Platform Compatibility
-- Identify packages causing platform issues
-- Suggest alternatives or conditional imports
-- Recommend appropriate platform configurations
+**Step 6: Verify improvements**
 
-## Implementation Notes
+Re-run `pana .` and compare scores. Iterate if issues remain.
 
-- Use regex parsing to extract issues from pana output
-- Maintain a mapping of issue patterns to resolution strategies
-- Provide detailed explanations for each suggested fix
-- Allow selective application of fixes
-- Verify fixes with subsequent pana run
+## Common issues and fixes
 
-## Specific Platform Compatibility Fixes
+### Missing files
 
-### WASM/Web Compatibility Issues
-When pana reports WASM or Web compatibility issues due to dart:io imports:
+**README.md**: Create with standard structure (title, description, installation, usage, license)
 
-1. **Identify the problematic code:** Usually caused by packages that import dart:io directly
-2. **Solution approaches:**
-   - Use conditional imports to provide different implementations for web vs native
-   - Replace dart:io-dependent packages with web-compatible alternatives
-   - Restructure code to isolate platform-specific functionality
+**CHANGELOG.md**: Use Keep a Changelog format:
+```markdown
+# Changelog
 
-3. **Implementation:**
-   - Create separate files for different platforms (e.g., `logger_native.dart`, `logger_web.dart`)
-   - Use conditional exports in main file: `export 'logger_native.dart' if (dart.library.js) 'logger_web.dart';`
-   - Ensure web implementation doesn't use dart:io or other non-web-compatible APIs
+## [Unreleased]
 
-## Usage
+## [0.1.0] - 2025-01-01
+### Added
+- Initial release
+```
 
-The skill will:
-1. Run `pana .` to analyze the current package
-2. Parse the output looking for compatibility issues
-3. Suggest specific fixes for each issue found
-4. Ask for confirmation before applying changes
-5. Apply changes if confirmed
-6. Re-run analysis to verify improvements
+**LICENSE**: Add MIT, BSD, or appropriate license file
+
+### Platform compatibility
+
+See [platform-compatibility.md](platform-compatibility.md) for WASM/Web issues.
+
+### Static analysis failures
+
+Run `dart analyze` and fix all issues before re-running pana.
+
+### Documentation coverage
+
+Add dartdoc comments to public APIs:
+```dart
+/// Returns the user's display name.
+/// 
+/// Returns null if the user has not set a display name.
+String? getDisplayName() { ... }
+```
+
+## Examples
+
+### Example 1: WASM compatibility issue
+
+**Pana output:**
+```
+## ✗ Platform support (10 / 20)
+Package not compatible with runtime wasm
+
+Because:
+* `package:myapp/main.dart` that imports:
+* `package:logger/logger.dart` that imports:
+* `dart:io`
+```
+
+**Fix:**
+Replace logger with conditional imports:
+```dart
+// lib/src/utils/logger.dart
+export 'logger_native.dart' if (dart.library.js) 'logger_web.dart';
+
+// lib/src/utils/logger_native.dart
+class Logger {
+  void e(String message, {Object? error, StackTrace? stackTrace}) {
+    print('[ERROR] $message');
+  }
+}
+
+// lib/src/utils/logger_web.dart
+class Logger {
+  void e(String message, {Object? error, StackTrace? stackTrace}) {}
+}
+```
+
+### Example 2: Missing documentation
+
+**Pana output:**
+```
+20% or more of the public API has dartdoc comments
+45 out of 200 API elements (22.5%) have documentation comments
+```
+
+**Fix:**
+Add documentation to undocumented elements:
+```dart
+// Before
+class User {
+  String? name;
+  int? age;
+}
+
+// After
+/// Represents a user in the system.
+class User {
+  /// The user's display name.
+  String? name;
+  
+  /// The user's age in years.
+  int? age;
+}
+```
+
+### Example 3: Formatting issues
+
+**Pana output:**
+```
+lib/main.dart doesn't match the Dart formatter
+```
+
+**Fix:**
+```bash
+dart format .
+```
+
+## Reference
+
+- [Pana documentation](https://pub.dev/packages/pana)
+- [Pub package requirements](https://pub.dev/help)
+- [Platform compatibility guide](platform-compatibility.md)
