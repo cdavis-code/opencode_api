@@ -5,6 +5,27 @@ description: Runs pana analysis on Dart packages, identifies scoring issues, and
 
 # Dart Package Review with Pana
 
+## Prerequisites
+
+Before running pana, ensure it's installed:
+
+```bash
+# Check if pana is installed
+command -v pana
+```
+
+If not installed, run the installation script:
+
+```bash
+bash scripts/install_pana.sh
+```
+
+Or install manually:
+
+```bash
+dart pub global activate pana
+```
+
 ## Quick start
 
 Run pana on the current package:
@@ -19,15 +40,20 @@ Copy this checklist and track your progress:
 
 ```
 Package Review Progress:
-- [ ] Step 1: Run pana analysis
-- [ ] Step 2: Identify scoring issues
-- [ ] Step 3: Categorize by severity
-- [ ] Step 4: Suggest resolutions
-- [ ] Step 5: Apply fixes (with user confirmation)
-- [ ] Step 6: Verify improvements
+- [ ] Step 1: Verify pana installation
+- [ ] Step 2: Run pana analysis
+- [ ] Step 3: Identify scoring issues
+- [ ] Step 4: Categorize by severity
+- [ ] Step 5: Suggest resolutions
+- [ ] Step 6: Apply fixes (with user confirmation)
+- [ ] Step 7: Verify improvements
 ```
 
-**Step 1: Run pana analysis**
+**Step 1: Verify pana installation**
+
+Check that pana is available. If not, use `scripts/install_pana.sh`.
+
+**Step 2: Run pana analysis**
 
 Execute `pana .` and review the output. The tool scores packages on:
 - Dart file conventions (30 points)
@@ -36,14 +62,14 @@ Execute `pana .` and review the output. The tool scores packages on:
 - Static analysis (50 points)
 - Dependencies (40 points)
 
-**Step 2: Identify scoring issues**
+**Step 3: Identify scoring issues**
 
 Look for sections marked with ✗ or [~] (partial credit). Parse the output for:
 - Critical: Missing files, invalid pubspec, analysis failures
 - Warnings: Platform compatibility, documentation gaps
 - Suggestions: Topics, examples, description improvements
 
-**Step 3: Categorize by severity**
+**Step 4: Categorize by severity**
 
 **Critical Issues** (must fix):
 - Package score below 100
@@ -61,14 +87,14 @@ Look for sections marked with ✗ or [~] (partial credit). Parse the output for:
 - Improve package description
 - Add more examples
 
-**Step 4: Suggest resolutions**
+**Step 5: Suggest resolutions**
 
 For each issue, provide:
 1. Clear explanation of the problem
 2. Specific fix recommendation
 3. Example code or command if applicable
 
-**Step 5: Apply fixes**
+**Step 6: Apply fixes**
 
 Ask user for confirmation before making changes. Present as:
 ```
@@ -77,7 +103,7 @@ Fix: [specific action]
 Apply? (yes/no)
 ```
 
-**Step 6: Verify improvements**
+**Step 7: Verify improvements**
 
 Re-run `pana .` and compare scores. Iterate if issues remain.
 
@@ -129,28 +155,12 @@ Package not compatible with runtime wasm
 
 Because:
 * `package:myapp/main.dart` that imports:
-* `package:logger/logger.dart` that imports:
+* `package:example_package/example_package.dart` that imports:
 * `dart:io`
 ```
 
 **Fix:**
-Replace logger with conditional imports:
-```dart
-// lib/src/utils/logger.dart
-export 'logger_native.dart' if (dart.library.js) 'logger_web.dart';
-
-// lib/src/utils/logger_native.dart
-class Logger {
-  void e(String message, {Object? error, StackTrace? stackTrace}) {
-    print('[ERROR] $message');
-  }
-}
-
-// lib/src/utils/logger_web.dart
-class Logger {
-  void e(String message, {Object? error, StackTrace? stackTrace}) {}
-}
-```
+Replace the problematic package with conditional imports. See [platform-compatibility.md](platform-compatibility.md) for detailed guidance.
 
 ### Example 2: Missing documentation
 

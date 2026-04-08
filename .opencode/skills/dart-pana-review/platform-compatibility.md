@@ -13,7 +13,7 @@ Package not compatible with runtime wasm
 
 Because:
 * `package:myapp/main.dart` that imports:
-* `package:logger/logger.dart` that imports:
+* `package:some_package/some_package.dart` that imports:
 * `dart:io`
 ```
 
@@ -25,79 +25,59 @@ Use conditional exports to provide different implementations for different platf
 
 **Step 1: Create platform-specific implementations**
 
-Create `logger_native.dart` for non-web platforms:
+Create `my_class_native.dart` for non-web platforms:
 
 ```dart
-/// Logger implementation for native platforms
-class Logger {
-  static final Logger _instance = Logger._internal();
-  factory Logger() => _instance;
-  Logger._internal();
-
-  void d(String message, {Object? error, StackTrace? stackTrace}) {
-    _log('DEBUG', message, error: error, stackTrace: stackTrace);
-  }
-
-  void e(String message, {Object? error, StackTrace? stackTrace}) {
-    _log('ERROR', message, error: error, stackTrace: stackTrace);
-  }
-
-  void _log(String level, String message, {Object? error, StackTrace? stackTrace}) {
-    print('[$level] $message');
-    if (error != null) print('Error: $error');
-    if (stackTrace != null) print('Stack: $stackTrace');
+/// Implementation for native platforms (desktop, mobile)
+class MyClass {
+  void doSomething() {
+    // Native-specific implementation
+    print('Running on native platform');
   }
 }
-
-final logger = Logger();
 ```
 
-Create `logger_web.dart` for web/WASM:
+Create `my_class_web.dart` for web/WASM:
 
 ```dart
-/// Logger stub for web platforms
-class Logger {
-  static final Logger _instance = Logger._internal();
-  factory Logger() => _instance;
-  Logger._internal();
-
-  void d(String message, {Object? error, StackTrace? stackTrace}) {}
-  void e(String message, {Object? error, StackTrace? stackTrace}) {}
+/// Implementation for web platforms
+class MyClass {
+  void doSomething() {
+    // Web-specific implementation (no dart:io)
+    print('Running on web platform');
+  }
 }
-
-final logger = Logger();
 ```
 
 **Step 2: Export conditionally**
 
-Create `logger.dart`:
+Create `my_class.dart`:
 
 ```dart
-export 'logger_native.dart' 
-    if (dart.library.js) 'logger_web.dart'
-    if (dart.library.html) 'logger_web.dart';
+export 'my_class_native.dart' 
+    if (dart.library.js) 'my_class_web.dart'
+    if (dart.library.html) 'my_class_web.dart';
 ```
 
-**Step 3: Use the logger**
+**Step 3: Use the class**
 
 ```dart
-import 'package:myapp/src/utils/logger.dart';
+import 'package:myapp/src/my_class.dart';
 
 void main() {
-  logger.e('Something went wrong', error: Exception('test'));
+  final myClass = MyClass();
+  myClass.doSomething();
 }
 ```
 
-### Common WASM-incompatible packages
+### Common WASM-incompatible patterns
 
-These packages commonly cause WASM issues:
-
-| Package | Issue | Alternative |
-|---------|-------|-------------|
-| `logger` | Uses dart:io for file output | Custom conditional implementation |
-| `path` | Platform-specific path separators | Use with conditional imports |
-| `shelf` | HTTP server, not for web | Use platform-appropriate server |
-| `args` | Command-line parsing | Use web-compatible config |
+| Pattern | Issue | Solution |
+|---------|-------|----------|
+| `import 'dart:io'` | Not available on web | Use conditional exports |
+| `import 'dart:html'` | Only available on web | Use conditional exports |
+| File system operations | No file system on web | Use web storage APIs |
+| Platform checks | Not portable | Use conditional imports |
 
 ## Web Platform Compatibility
 
@@ -146,6 +126,41 @@ import 'platform_stub.dart'
 // platform_io.dart exports isLinux = true
 // platform_stub.dart exports isLinux = false
 if (isLinux) { ... }
+```
+
+## Creating Conditional Import Files
+
+### Stub file (default)
+
+Create `feature_stub.dart` with default or no-op implementations:
+
+```dart
+/// Default implementation - used when no platform-specific version matches
+void doSomething() {
+  // No-op or default behavior
+}
+```
+
+### Platform-specific file
+
+Create `feature_io.dart` for platforms with `dart:io`:
+
+```dart
+import 'dart:io';
+
+void doSomething() {
+  // Platform-specific implementation using dart:io
+  stdout.writeln('Hello from native!');
+}
+```
+
+### Main file
+
+Create `feature.dart` that exports the right version:
+
+```dart
+export 'feature_stub.dart'
+    if (dart.library.io) 'feature_io.dart';
 ```
 
 ## Verification
