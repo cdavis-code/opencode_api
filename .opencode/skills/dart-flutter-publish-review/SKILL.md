@@ -7,6 +7,32 @@ description: Prepares Dart and Flutter packages for publication to pub.dev, ensu
 
 Prepare your Dart or Flutter package for publication to pub.dev.
 
+## When to Use
+
+Use this skill when:
+
+- **Publishing a new package** - Before your first publication to pub.dev
+- **Updating package metadata** - Adding topics, funding, or improving discoverability
+- **Preparing version updates** - Ensuring all documentation and metadata is current
+- **Improving package quality** - Reviewing completeness before publication
+- **Setting up verified publisher** - Transferring packages to organizational publishers
+
+This skill is particularly useful for:
+- First-time package authors learning pub.dev requirements
+- Teams ensuring consistent package quality
+- Open source maintainers improving package discoverability
+- Projects preparing for public release
+
+## When Not to Use
+
+Do not use this skill when:
+
+- **Private packages** - Packages meant only for internal use
+- **Packages with `publish_to: none`** - Explicitly configured to prevent publication
+- **Incomplete development** - Core functionality not yet implemented or tested
+- **Breaking changes without migration guide** - Major version updates lacking documentation
+- **Packages with security issues** - Known vulnerabilities should be fixed first
+
 ## Prerequisites
 
 Before publishing, run pana analysis to identify scoring issues:
