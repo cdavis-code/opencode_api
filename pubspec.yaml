@@ -1,9 +1,9 @@
 name: opencode_api
 description: A Dart package that wraps the opencode.ai API using retrofit for type-safe HTTP requests.
 version: 0.1.0
-homepage: https://github.com/yourusername/opencode_api
-repository: https://github.com/yourusername/opencode_api
-issue_tracker: https://github.com/yourusername/opencode_api/issues
+homepage: https://github.com/cdavis-code/opencode_api
+repository: https://github.com/cdavis-code/opencode_api
+issue_tracker: https://github.com/cdavis-code/opencode_api/issues
 
 environment:
   sdk: '>=3.8.0 <4.0.0'
