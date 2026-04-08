@@ -36,6 +36,7 @@ MessagePart _$MessagePartFromJson(Map<String, dynamic> json) => MessagePart(
   id: json['id'] as String?,
   type: json['type'] as String?,
   content: json['content'] as String?,
+  text: json['text'] as String?,
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
@@ -46,5 +47,6 @@ Map<String, dynamic> _$MessagePartToJson(MessagePart instance) =>
       'id': instance.id,
       'type': instance.type,
       'content': instance.content,
+      'text': instance.text,
       'createdAt': instance.createdAt?.toIso8601String(),
     };

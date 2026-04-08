@@ -34,9 +34,10 @@ class MessagePart {
   final String? id;
   final String? type;
   final String? content;
+  final String? text;
   final DateTime? createdAt;
 
-  MessagePart({this.id, this.type, this.content, this.createdAt});
+  MessagePart({this.id, this.type, this.content, this.text, this.createdAt});
 
   factory MessagePart.fromJson(Map<String, dynamic> json) =>
       _$MessagePartFromJson(json);
