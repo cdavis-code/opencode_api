@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Updated pubspec.yaml repository URLs to point to correct GitHub repo (cdavis-code)
+- Changed license from BSD-3-Clause to MIT
 
 ---
 
