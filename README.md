@@ -64,25 +64,156 @@ void main() async {
 
 The `Opencode` object provides access to the following service groups:
 
-| Service | Description | Example Methods |
-|---------|-------------|----------------|
-| `global` | Global endpoints | `getHealth()`, `getGlobalEvents()` |
-| `project` | Project management | `getProjects()`, `getCurrentProject()` |
-| `path` | Path operations | `getPath()` |
-| `vcs` | Version control | `getVcs()` |
-| `instance` | Instance management | `disposeInstance()` |
-| `config` | Configuration | `getConfig()`, `updateConfig()` |
-| `provider` | Provider management | `getProviders()`, `authorizeProvider()` |
-| `session` | Session management | `getSessions()`, `createSession()`, `sendMessage()` |
-| `commands` | Command operations | `getCommands()` |
-| `files` | File operations | `findFiles()`, `listFiles()`, `getFileContent()` |
-| `experimental` | Experimental features | `getTools()`, `getToolIds()` |
-| `lspFormatterMcp` | LSP, Formatters, MCP | `getLspStatus()`, `getMcpStatus()` |
-| `agents` | Agent management | `getAgents()` |
-| `logging` | Logging operations | `writeLog()` |
-| `tui` | TUI control | `tuiOpenHelp()`, `tuiShowToast()` |
-| `auth` | Authentication | `setAuth()` |
-| `events` | Event streams | `getEvents()` |
+### Global
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getHealth()` | Get server health and version | `{ healthy: true, version: string }` |
+| `getGlobalEvents()` | Get global events (SSE stream) | Event stream |
+
+### Project
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getProjects()` | List all projects | `Project[]` |
+| `getCurrentProject()` | Get the current project | `Project` |
+
+### Path & VCS
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getPath()` | Get the current path | `{ path: string }` |
+| `getVcs()` | Get VCS info for the current project | `{ branch, remote, isClean }` |
+
+### Instance
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `disposeInstance()` | Dispose the current instance | `boolean` |
+
+### Config
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getConfig()` | Get config info | `Config` object |
+| `updateConfig(body)` | Update config | `Config` object |
+| `getConfigProviders()` | List providers and default models | `{ providers, default }` |
+
+### Provider
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getProviders()` | List all providers | `{ all, default, connected }` |
+| `getProviderAuth()` | Get provider authentication methods | `{ [providerID]: AuthMethod[] }` |
+| `authorizeProvider(id, body)` | Authorize a provider using OAuth | `{ url, state }` |
+| `providerOAuthCallback(id, body)` | Handle OAuth callback for a provider | `boolean` |
+
+### Session
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getSessions()` | List all sessions | `Session[]` |
+| `createSession(body)` | Create a new session | `Session` |
+| `getSessionStatus()` | Get session status for all sessions | `{ [sessionID]: Status }` |
+| `getSession(id)` | Get session details | `Session` |
+| `deleteSession(id)` | Delete a session and all its data | `boolean` |
+| `updateSession(id, body)` | Update session properties | `Session` |
+| `getSessionChildren(id)` | Get a session's child sessions | `Session[]` |
+| `getSessionTodo(id)` | Get the todo list for a session | `Todo[]` |
+| `initSession(id, body)` | Analyze app and create AGENTS.md | `boolean` |
+| `forkSession(id, body)` | Fork an existing session at a message | `Session` |
+| `abortSession(id)` | Abort a running session | `boolean` |
+| `shareSession(id)` | Share a session | `Session` |
+| `unshareSession(id)` | Unshare a session | `Session` |
+| `getSessionDiff(id, messageID?)` | Get the diff for this session | `FileDiff[]` |
+| `summarizeSession(id, body)` | Summarize the session | `boolean` |
+| `revertMessage(id, body)` | Revert a message | `boolean` |
+| `unrevertMessages(id)` | Restore all reverted messages | `boolean` |
+| `respondToPermissionRequest(id, permissionID, body)` | Respond to a permission request | `boolean` |
+
+### Messages (via Session Service)
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getMessages(id, limit?)` | List messages in a session | `MessageWithParts[]` |
+| `sendMessage(id, body)` | Send a message and wait for response | `MessageWithParts` |
+| `getMessage(id, messageID)` | Get message details | `MessageWithParts` |
+| `sendMessageAsync(id, body)` | Send a message asynchronously (no wait) | `void` |
+| `executeCommand(id, body)` | Execute a slash command | `MessageWithParts` |
+| `runShell(id, body)` | Run a shell command | `MessageWithParts` |
+
+### Commands
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getCommands()` | List all commands | `Command[]` |
+
+### Files
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `findInFiles(pattern)` | Search for text in files | `FindResult[]` |
+| `findFiles(query)` | Find files and directories by name | `string[]` |
+| `findSymbols(query)` | Find workspace symbols | `Symbol[]` |
+| `listFiles(path?)` | List files and directories | `FileNode[]` |
+| `getFileContent(path)` | Read a file | `{ path, content, encoding }` |
+| `getFileStatus()` | Get status for tracked files | `FileStatus[]` |
+
+### Tools (Experimental)
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getToolIds()` | List all tool IDs | `{ ids: string[] }` |
+| `getTools(provider?, model?)` | List tools with JSON schemas for a model | `{ tools: [] }` |
+
+### LSP, Formatters & MCP
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getLspStatus()` | Get LSP server status | `LSPStatus[]` |
+| `getFormatterStatus()` | Get formatter status | `FormatterStatus[]` |
+| `getMcpStatus()` | Get MCP server status | `{ [name]: MCPStatus }` |
+| `addMcpServer(body)` | Add MCP server dynamically | `MCPStatus` |
+
+### Agents
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getAgents()` | List all available agents | `Agent[]` |
+
+### Logging
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `writeLog(body)` | Write log entry | `boolean` |
+
+### TUI
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `tuiAppendPrompt(body)` | Append text to the prompt | `boolean` |
+| `tuiOpenHelp()` | Open the help dialog | `boolean` |
+| `tuiOpenSessions()` | Open the session selector | `boolean` |
+| `tuiOpenThemes()` | Open the theme selector | `boolean` |
+| `tuiOpenModels()` | Open the model selector | `boolean` |
+| `tuiSubmitPrompt()` | Submit the current prompt | `boolean` |
+| `tuiClearPrompt()` | Clear the prompt | `boolean` |
+| `tuiExecuteCommand(body)` | Execute a command | `boolean` |
+| `tuiShowToast(body)` | Show toast | `boolean` |
+| `tuiControlNext()` | Wait for the next control request | `ControlRequest` |
+| `tuiControlResponse(body)` | Respond to a control request | `boolean` |
+
+### Auth
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `setAuth(id, body)` | Set authentication credentials | `boolean` |
+
+### Events
+
+| Method | Description | Response |
+|--------|-------------|----------|
+| `getEvents()` | Get events (SSE stream) | Event stream |
 
 ## Migration from OpencodeClient
 
