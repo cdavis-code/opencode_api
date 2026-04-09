@@ -3,15 +3,17 @@ import 'package:test/test.dart';
 
 void main() {
   group('Opencode API Tests', () {
-    late OpencodeClient client;
+    test('should create Opencode instance with connect', () async {
+      final opencode = await Opencode.connect(
+        username: 'test_user',
+        password: 'test_password',
+        baseUrl: 'http://localhost:4096',
+      );
 
-    setUp(() {
-      final dio = OpencodeClient.createDio(baseUrl: 'http://localhost:4096');
-      client = OpencodeClient(dio);
-    });
-
-    test('should create client instance', () {
-      expect(client, isNotNull);
+      expect(opencode, isNotNull);
+      expect(opencode.global, isNotNull);
+      expect(opencode.project, isNotNull);
+      expect(opencode.session, isNotNull);
     });
 
     test('should create Dio instance with authentication', () {
@@ -30,6 +32,50 @@ void main() {
 
       expect(dio, isNotNull);
       expect(dio.options.baseUrl, 'http://localhost:4096');
+    });
+
+    test('should access global service', () async {
+      final opencode = await Opencode.connect(baseUrl: 'http://localhost:4096');
+
+      expect(opencode.global.getHealthRaw, isNotNull);
+      expect(opencode.global.getGlobalEvents, isNotNull);
+    });
+
+    test('should access project service', () async {
+      final opencode = await Opencode.connect(baseUrl: 'http://localhost:4096');
+
+      expect(opencode.project.getProjects, isNotNull);
+      expect(opencode.project.getCurrentProject, isNotNull);
+    });
+
+    test('should access session service', () async {
+      final opencode = await Opencode.connect(baseUrl: 'http://localhost:4096');
+
+      expect(opencode.session.getSessions, isNotNull);
+      expect(opencode.session.createSession, isNotNull);
+      expect(opencode.session.sendMessage, isNotNull);
+    });
+
+    test('should access files service', () async {
+      final opencode = await Opencode.connect(baseUrl: 'http://localhost:4096');
+
+      expect(opencode.files.findInFiles, isNotNull);
+      expect(opencode.files.findFiles, isNotNull);
+      expect(opencode.files.listFiles, isNotNull);
+    });
+
+    test('should access config service', () async {
+      final opencode = await Opencode.connect(baseUrl: 'http://localhost:4096');
+
+      expect(opencode.config.getConfig, isNotNull);
+      expect(opencode.config.updateConfig, isNotNull);
+    });
+
+    test('should access tui service', () async {
+      final opencode = await Opencode.connect(baseUrl: 'http://localhost:4096');
+
+      expect(opencode.tui.tuiOpenHelp, isNotNull);
+      expect(opencode.tui.tuiShowToast, isNotNull);
     });
   });
 

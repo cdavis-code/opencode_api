@@ -13,3 +13,5 @@ build/
 .DS_Store
 *.swp
 *.swo
+
+opencode.json

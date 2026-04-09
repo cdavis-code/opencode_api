@@ -220,7 +220,7 @@ After running `dart pub publish --dry-run`, carefully review any warnings or err
 ```
 ✅ All dry run issues resolved! The package is ready for publishing.
 
-Would you like me to publish now? (Run `dart pub publish`)
+Would you like me to publish now? (Run `dart pub publish --force`)
 ```
 
 ### If errors remain
@@ -234,7 +234,8 @@ Only move to Step 9 when dry run shows no errors.
 When ready:
 
 ```bash
-dart pub publish
+## non interactive publish
+dart pub publish --force
 ```
 
 The first time, this prompts for Google Account authentication.

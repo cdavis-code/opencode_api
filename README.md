@@ -1,34 +1,52 @@
 # opencode_api
 
 <div style="text-align: center;">
-  <img src="opencode_api_logo.png" style="width: 300px;">
+  <img src="https://github.com/cdavis-code/opencode_api/raw/main/opencode_api_logo.png" style="width: 300px;">
 </div>
 
 A Dart package that wraps the opencode.ai API using retrofit for type-safe HTTP requests.
+
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [Configuration](#configuration)
+- [API Services](#api-services)
+- [Migration from OpencodeClient](#migration-from-opencodeclient)
+- [Documentation](#documentation)
+- [Error Handling](#error-handling)
+- [Running the Generator](#running-the-generator)
+- [Contributors](#contributors)
+- [Support](#support)
+- [License](#license)
 
 ## Quick Start
 
 ```dart
 import 'package:opencode_api/opencode_api.dart';
-import 'package:dio/dio.dart';
 
 void main() async {
-  final dio = OpencodeClient.createDio(
+  // Connect to the opencode server
+  final opencode = await Opencode.connect(
     username: 'opencode',
     password: 'your-password',
     baseUrl: 'http://localhost:4096'
   );
 
-  final client = OpencodeClient(dio);
-
-  final health = await client.getHealth();
+  // Use service groups to access API endpoints
+  final health = await opencode.global.getHealth();
   print('Server healthy: ${health.healthy}');
+  
+  // List sessions
+  final sessions = await opencode.session.getSessions();
+  print('Found ${sessions.length} sessions');
 }
 ```
 
 ## Features
 
 - **Type-safe API client** - Uses retrofit for compile-time API contracts
+- **Service-oriented architecture** - Organized API endpoints into logical service groups
 - **Comprehensive endpoints** - Covers all opencode.ai API endpoints
 - **Secure error handling** - Custom exceptions with user-friendly messages, no implementation leaks
 - **Built-in logging** - Uses logger package with platform-aware conditional imports
@@ -42,27 +60,49 @@ void main() async {
 | `username` | Auth username | `opencode` |
 | `password` | Auth password | (required) |
 
-## Supported Endpoints
+## API Services
 
-| Category | Endpoints |
-|----------|-----------|
-| **Global** | `/global/health`, `/global/event` |
-| **Project** | `/project`, `/project/current` |
-| **Path & VCS** | `/path`, `/vcs` |
-| **Instance** | `/instance/dispose` |
-| **Config** | `/config`, `/config/providers` |
-| **Provider** | `/provider`, `/provider/auth`, OAuth |
-| **Session** | Full CRUD + init, fork, abort, share, diff, summarize, revert, permissions |
-| **Messages** | Send, list, async, command, shell |
-| **Commands** | `/command` |
-| **Files** | `/find`, `/find/file`, `/find/symbol`, `/file`, `/file/content`, `/file/status` |
-| **Tools** | `/experimental/tool/ids`, `/experimental/tool` |
-| **LSP/Formatter/MCP** | `/lsp`, `/formatter`, `/mcp` |
-| **Agents** | `/agent` |
-| **Logging** | `/log` |
-| **TUI** | 12 endpoints for TUI control |
-| **Auth** | `/auth/:id` |
-| **Events** | `/event` (SSE stream) |
+The `Opencode` object provides access to the following service groups:
+
+| Service | Description | Example Methods |
+|---------|-------------|----------------|
+| `global` | Global endpoints | `getHealth()`, `getGlobalEvents()` |
+| `project` | Project management | `getProjects()`, `getCurrentProject()` |
+| `path` | Path operations | `getPath()` |
+| `vcs` | Version control | `getVcs()` |
+| `instance` | Instance management | `disposeInstance()` |
+| `config` | Configuration | `getConfig()`, `updateConfig()` |
+| `provider` | Provider management | `getProviders()`, `authorizeProvider()` |
+| `session` | Session management | `getSessions()`, `createSession()`, `sendMessage()` |
+| `commands` | Command operations | `getCommands()` |
+| `files` | File operations | `findFiles()`, `listFiles()`, `getFileContent()` |
+| `experimental` | Experimental features | `getTools()`, `getToolIds()` |
+| `lspFormatterMcp` | LSP, Formatters, MCP | `getLspStatus()`, `getMcpStatus()` |
+| `agents` | Agent management | `getAgents()` |
+| `logging` | Logging operations | `writeLog()` |
+| `tui` | TUI control | `tuiOpenHelp()`, `tuiShowToast()` |
+| `auth` | Authentication | `setAuth()` |
+| `events` | Event streams | `getEvents()` |
+
+## Migration from OpencodeClient
+
+The old `OpencodeClient` is deprecated but still available for backward compatibility. Here's how to migrate:
+
+### Old API (Deprecated)
+```dart
+final dio = OpencodeClient.createDio(username: 'user', password: 'pass');
+final client = OpencodeClient(dio);
+final health = await client.getHealth();
+```
+
+### New API (Recommended)
+```dart
+final opencode = await Opencode.connect(
+  username: 'user', 
+  password: 'pass'
+);
+final health = await opencode.global.getHealth();
+```
 
 ## Documentation
 
@@ -75,7 +115,7 @@ The package provides user-friendly error messages without exposing implementatio
 
 ```dart
 try {
-  final sessions = await client.getSessions();
+  final sessions = await opencode.session.getSessions();
 } catch (e) {
   if (e is OpencodeException) {
     print(e.userMessage); // Safe for users
@@ -90,6 +130,12 @@ After changes to API definitions:
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
+
+## Contributors
+
+Thanks to all the contributors who have helped make this package better!
+
+- <img src="https://avatars.githubusercontent.com/u/3249991?v=4" width="25" height="25"/> [cdavis-code](https://github.com/cdavis-code) - Author and maintainer
 
 ## Support
 

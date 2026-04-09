@@ -6,6 +6,7 @@ import '../utils/logger.dart';
 /// Extension methods for easier usage of the OpencodeClient
 extension OpencodeClientExtension on OpencodeClient {
   /// Get server health and version (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.global.getHealth() instead')
   Future<HealthResponse> getHealth() async {
     try {
       final response = await getHealthRaw();
@@ -17,6 +18,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get the current path (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.path.getPath() instead')
   Future<PathResponse> getPath() async {
     try {
       final response = await getPathRaw();
@@ -28,6 +30,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get VCS info for the current project (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.vcs.getVcs() instead')
   Future<VcsResponse> getVcs() async {
     try {
       final response = await getVcsRaw();
@@ -39,6 +42,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Search for text in files (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.files.findInFiles() instead')
   Future<List<FindResult>> findInFiles({required String pattern}) async {
     try {
       final response = await findInFilesRaw(pattern: pattern);
@@ -50,6 +54,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Find files and directories by name (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.files.findFiles() instead')
   Future<List<String>> findFiles({required String query}) async {
     try {
       final response = await findFilesRaw(query: query);
@@ -61,6 +66,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Find workspace symbols (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.files.findSymbols() instead')
   Future<List<Symbol>> findSymbols({required String query}) async {
     try {
       final response = await findSymbolsRaw(query: query);
@@ -72,6 +78,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Read a file (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.files.getFileContent() instead')
   Future<FileContentResponse> getFileContent({required String path}) async {
     try {
       final response = await getFileContentRaw(path: path);
@@ -83,6 +90,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get the todo list for a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.getSessionTodo() instead')
   Future<List<Todo>> getSessionTodo(String id) async {
     try {
       final response = await getSessionTodoRaw(id);
@@ -94,6 +102,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Initialize a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.initSession() instead')
   Future<bool> initSession(String id, Map<String, dynamic> body) async {
     try {
       final response = await initSessionRaw(id, body);
@@ -105,6 +114,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Fork a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.forkSession() instead')
   Future<Session> forkSession(String id, Map<String, dynamic> body) async {
     try {
       final response = await forkSessionRaw(id, body);
@@ -116,6 +126,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Abort a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.abortSession() instead')
   Future<bool> abortSession(String id) async {
     try {
       final response = await abortSessionRaw(id);
@@ -127,6 +138,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Share a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.shareSession() instead')
   Future<Session> shareSession(String id) async {
     try {
       final response = await shareSessionRaw(id);
@@ -138,6 +150,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Unshare a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.unshareSession() instead')
   Future<Session> unshareSession(String id) async {
     try {
       final response = await unshareSessionRaw(id);
@@ -149,6 +162,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get session diff (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.getSessionDiff() instead')
   Future<List<FileDiff>> getSessionDiff(String id, {String? messageID}) async {
     try {
       final response = await getSessionDiffRaw(id, messageID: messageID);
@@ -160,6 +174,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Summarize a session (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.summarizeSession() instead')
   Future<bool> summarizeSession(String id, Map<String, dynamic> body) async {
     try {
       final response = await summarizeSessionRaw(id, body);
@@ -171,6 +186,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Revert a message (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.revertMessage() instead')
   Future<bool> revertMessage(String id, Map<String, dynamic> body) async {
     try {
       final response = await revertMessageRaw(id, body);
@@ -182,6 +198,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Restore all reverted messages (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.unrevertMessages() instead')
   Future<bool> unrevertMessages(String id) async {
     try {
       final response = await unrevertMessagesRaw(id);
@@ -193,6 +210,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Respond to a permission request (convenience method that handles response extraction)
+  @Deprecated('Use Opencode.session.respondToPermissionRequest() instead')
   Future<bool> respondToPermissionRequest(
     String id,
     String permissionID,
@@ -216,6 +234,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Dispose the current instance
+  @Deprecated('Use Opencode.instance.disposeInstance() instead')
   Future<bool> disposeInstance() async {
     try {
       final response = await disposeInstanceRaw();
@@ -231,6 +250,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Get config info
+  @Deprecated('Use Opencode.config.getConfig() instead')
   Future<ConfigResponse> getConfig() async {
     try {
       final response = await getConfigRaw();
@@ -242,6 +262,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Update config
+  @Deprecated('Use Opencode.config.updateConfig() instead')
   Future<ConfigResponse> updateConfig(Map<String, dynamic> body) async {
     try {
       final response = await updateConfigRaw(body);
@@ -253,6 +274,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// List providers and default models
+  @Deprecated('Use Opencode.config.getConfigProviders() instead')
   Future<ConfigProvidersResponse> getConfigProviders() async {
     try {
       final response = await getConfigProvidersRaw();
@@ -268,6 +290,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// List all providers
+  @Deprecated('Use Opencode.provider.getProviders() instead')
   Future<ProviderListResponse> getProviders() async {
     try {
       final response = await getProvidersRaw();
@@ -279,6 +302,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get provider authentication methods
+  @Deprecated('Use Opencode.provider.getProviderAuth() instead')
   Future<ProviderAuthMethodsResponse> getProviderAuth() async {
     try {
       final response = await getProviderAuthRaw();
@@ -290,6 +314,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Authorize a provider using OAuth
+  @Deprecated('Use Opencode.provider.authorizeProvider() instead')
   Future<ProviderAuthAuthorization> authorizeProvider(
     String id,
     Map<String, dynamic> body,
@@ -304,6 +329,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Handle OAuth callback for a provider
+  @Deprecated('Use Opencode.provider.providerOAuthCallback() instead')
   Future<bool> providerOAuthCallback(
     String id,
     Map<String, dynamic> body,
@@ -322,6 +348,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Get session status for all sessions
+  @Deprecated('Use Opencode.session.getSessionStatus() instead')
   Future<Map<String, SessionStatus>> getSessionStatus() async {
     try {
       final response = await getSessionStatusRaw();
@@ -337,6 +364,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// List all commands
+  @Deprecated('Use Opencode.commands.getCommands() instead')
   Future<List<Command>> getCommands() async {
     try {
       final response = await getCommandsRaw();
@@ -352,6 +380,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// List messages in a session
+  @Deprecated('Use Opencode.session.getMessages() instead')
   Future<List<MessageWithParts>> getMessages(String id, {int? limit}) async {
     try {
       final response = await getMessagesRaw(id, limit: limit);
@@ -363,6 +392,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Send a message and wait for response
+  @Deprecated('Use Opencode.session.sendMessage() instead')
   Future<MessageWithParts> sendMessage(
     String id,
     Map<String, dynamic> body,
@@ -377,6 +407,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get message details
+  @Deprecated('Use Opencode.session.getMessage() instead')
   Future<MessageWithParts> getMessage(String id, String messageID) async {
     try {
       final response = await getMessageRaw(id, messageID);
@@ -388,6 +419,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Send a message asynchronously (no wait)
+  @Deprecated('Use Opencode.session.sendMessageAsync() instead')
   Future<void> sendMessageAsync(String id, Map<String, dynamic> body) async {
     try {
       await sendMessageAsyncRaw(id, body);
@@ -398,6 +430,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Execute a slash command
+  @Deprecated('Use Opencode.session.executeCommand() instead')
   Future<MessageWithParts> executeCommand(
     String id,
     Map<String, dynamic> body,
@@ -412,6 +445,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Run a shell command
+  @Deprecated('Use Opencode.session.runShell() instead')
   Future<MessageWithParts> runShell(
     String id,
     Map<String, dynamic> body,
@@ -430,6 +464,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// List files and directories
+  @Deprecated('Use Opencode.files.listFiles() instead')
   Future<List<FileNodeResponse>> listFiles({String? path}) async {
     try {
       final response = await listFilesRaw(path: path);
@@ -441,6 +476,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get status for tracked files
+  @Deprecated('Use Opencode.files.getFileStatus() instead')
   Future<List<FileStatus>> getFileStatus() async {
     try {
       final response = await getFileStatusRaw();
@@ -456,6 +492,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// List all tool IDs
+  @Deprecated('Use Opencode.experimental.getToolIds() instead')
   Future<ToolIDs> getToolIds() async {
     try {
       final response = await getToolIdsRaw();
@@ -467,6 +504,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// List tools with JSON schemas for a model
+  @Deprecated('Use Opencode.experimental.getTools() instead')
   Future<ToolList> getTools({String? provider, String? model}) async {
     try {
       final response = await getToolsRaw(provider: provider, model: model);
@@ -482,6 +520,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Get LSP server status
+  @Deprecated('Use Opencode.lspFormatterMcp.getLspStatus() instead')
   Future<List<LSPStatus>> getLspStatus() async {
     try {
       final response = await getLspStatusRaw();
@@ -493,6 +532,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get formatter status
+  @Deprecated('Use Opencode.lspFormatterMcp.getFormatterStatus() instead')
   Future<List<FormatterStatus>> getFormatterStatus() async {
     try {
       final response = await getFormatterStatusRaw();
@@ -504,6 +544,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Get MCP server status
+  @Deprecated('Use Opencode.lspFormatterMcp.getMcpStatus() instead')
   Future<Map<String, MCPStatus>> getMcpStatus() async {
     try {
       final response = await getMcpStatusRaw();
@@ -515,6 +556,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Add MCP server dynamically
+  @Deprecated('Use Opencode.lspFormatterMcp.addMcpServer() instead')
   Future<MCPStatus> addMcpServer(Map<String, dynamic> body) async {
     try {
       final response = await addMcpServerRaw(body);
@@ -530,6 +572,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// List all available agents
+  @Deprecated('Use Opencode.agents.getAgents() instead')
   Future<List<Agent>> getAgents() async {
     try {
       final response = await getAgentsRaw();
@@ -545,6 +588,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Write log entry
+  @Deprecated('Use Opencode.logging.writeLog() instead')
   Future<bool> writeLog(Map<String, dynamic> body) async {
     try {
       final response = await writeLogRaw(body);
@@ -560,6 +604,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Append text to the prompt
+  @Deprecated('Use Opencode.tui.tuiAppendPrompt() instead')
   Future<bool> tuiAppendPrompt(Map<String, dynamic> body) async {
     try {
       final response = await tuiAppendPromptRaw(body);
@@ -571,6 +616,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Open the help dialog
+  @Deprecated('Use Opencode.tui.tuiOpenHelp() instead')
   Future<bool> tuiOpenHelp() async {
     try {
       final response = await tuiOpenHelpRaw();
@@ -582,6 +628,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Open the session selector
+  @Deprecated('Use Opencode.tui.tuiOpenSessions() instead')
   Future<bool> tuiOpenSessions() async {
     try {
       final response = await tuiOpenSessionsRaw();
@@ -593,6 +640,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Open the theme selector
+  @Deprecated('Use Opencode.tui.tuiOpenThemes() instead')
   Future<bool> tuiOpenThemes() async {
     try {
       final response = await tuiOpenThemesRaw();
@@ -604,6 +652,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Open the model selector
+  @Deprecated('Use Opencode.tui.tuiOpenModels() instead')
   Future<bool> tuiOpenModels() async {
     try {
       final response = await tuiOpenModelsRaw();
@@ -615,6 +664,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Submit the current prompt
+  @Deprecated('Use Opencode.tui.tuiSubmitPrompt() instead')
   Future<bool> tuiSubmitPrompt() async {
     try {
       final response = await tuiSubmitPromptRaw();
@@ -626,6 +676,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Clear the prompt
+  @Deprecated('Use Opencode.tui.tuiClearPrompt() instead')
   Future<bool> tuiClearPrompt() async {
     try {
       final response = await tuiClearPromptRaw();
@@ -637,6 +688,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Execute a command
+  @Deprecated('Use Opencode.tui.tuiExecuteCommand() instead')
   Future<bool> tuiExecuteCommand(Map<String, dynamic> body) async {
     try {
       final response = await tuiExecuteCommandRaw(body);
@@ -648,6 +700,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Show toast
+  @Deprecated('Use Opencode.tui.tuiShowToast() instead')
   Future<bool> tuiShowToast(Map<String, dynamic> body) async {
     try {
       final response = await tuiShowToastRaw(body);
@@ -659,6 +712,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Wait for the next control request
+  @Deprecated('Use Opencode.tui.tuiControlNext() instead')
   Future<ControlRequest> tuiControlNext() async {
     try {
       final response = await tuiControlNextRaw();
@@ -670,6 +724,7 @@ extension OpencodeClientExtension on OpencodeClient {
   }
 
   /// Respond to a control request
+  @Deprecated('Use Opencode.tui.tuiControlResponse() instead')
   Future<bool> tuiControlResponse(Map<String, dynamic> body) async {
     try {
       final response = await tuiControlResponseRaw(body);
@@ -685,6 +740,7 @@ extension OpencodeClientExtension on OpencodeClient {
   // =============================================================================
 
   /// Set authentication credentials
+  @Deprecated('Use Opencode.auth.setAuth() instead')
   Future<bool> setAuth(String id, Map<String, dynamic> body) async {
     try {
       final response = await setAuthRaw(id, body);
