@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-09
+
+### Added
+- Service-oriented architecture with `Opencode.connect()` method
+- 17 service classes: Global, Project, Path, VCS, Instance, Config, Provider, Session, Commands, Files, Experimental, LspFormatterMcp, Agents, Logging, TUI, Auth, Events
+- Convenience method extensions for all services
+- Table of contents and contributors section to README
+- Detailed API documentation in README with Dart return types
+
+### Changed
+- All `OpencodeClient` methods marked as deprecated with migration guidance
+- Refactored API to use service groups (e.g., `opencode.global.getHealth()` instead of `client.getHealth()`)
+- Updated example to demonstrate new service-oriented API
+- Updated tests to verify new service architecture
+
+### Fixed
+- Fixed service classes to properly use extension methods instead of direct implementation
+
+---
+
 ## [0.1.1] - 2026-04-08
 
 ### Added

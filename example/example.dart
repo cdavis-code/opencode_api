@@ -42,6 +42,13 @@ void main() async {
         print('    text: ${part.text}');
       }
     }
+
+    print('\n--- Provider Info ---');
+    final providers = await opencode.provider.getProviders();
+    print('Available providers: ${providers.all?.length ?? 0}');
+    for (final provider in providers.all ?? []) {
+      print('  - ${provider.name}: ${provider.id}');
+    }
   } catch (e) {
     print('Error: $e');
   }
